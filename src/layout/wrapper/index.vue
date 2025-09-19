@@ -482,4 +482,6 @@ export default {
 @import "../../assets-vito/css/typography.css";
 @import "../../assets-vito/css/style.css";
 @import "../../assets-vito/css/responsive.css";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");
 </style>
