@@ -1,31 +1,59 @@
-<template >
-    <div>
-         <h2 class="title">Phiếu nhập kho</h2>
-    <div class="filter-box">
-      <div class="filter-row">
-        <label>Mã phiếu:</label>
-        <input type="text" v-model="filters.maPhieu" />
-        <label>Tình trạng:</label>
-        <select v-model="filters.tinhTrang">
-          <option value="">-- Chọn --</option>
-          <option>Chờ duyệt</option>
-          <option>Đã duyệt</option>
-          <option>Từ chối</option>
-        </select>
-      </div>
-      <div class="filter-row">
-        <label>Nguồn xuất:</label>
-        <input type="text" v-model="filters.nguonXuat" />
-        <label>Từ ngày:</label>
-        <input type="date" v-model="filters.tuNgay" />
-        <label>Đến ngày:</label>
-        <input type="date" v-model="filters.denNgay" />
-        <button @click="timKiem">Tìm kiếm</button>
+<template>
+  <div>
+    <div class="row mt-5">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="title">Phiếu nhập kho</h2>
+            <div class="filter-box">
+              <div class="row">
+                <div class="col-lg-5">
+                  <label>Mã phiếu:</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    v-model="filters.maPhieu"
+                  />
+                </div>
+                <div class="col-lg-2">
+                  <label>Tình trạng:</label>
+                  <select class="form-control" v-model="filters.tinhTrang">
+                    <option value="">-- Chọn --</option>
+                    <option>Chờ duyệt</option>
+                    <option>Đã duyệt</option>
+                    <option>Từ chối</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3">
+                  <label>Nguồn xuất:</label>
+                  <input class="form-control" type="text" v-model="filters.nguonXuat" />
+                </div>
+                <div class="col-lg-3">
+                  <label>Từ ngày:</label>
+                  <input class="form-control" type="date" v-model="filters.tuNgay" />
+                </div>
+                <div class="col-lg-3">
+                  <label>Đến ngày:</label>
+                  <input class="form-control" type="date" v-model="filters.denNgay" />
+                </div>
+                <div class="col-lg-3 mt-5">
+                  <button class="btn btn-primary" @click="timKiem">
+                    Tìm kiếm
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="create-btn">
       <button @click="taoPhieu">+ Tạo phiếu nhập kho</button>
     </div>
+
     <table class="data-table">
       <thead>
         <tr>
@@ -45,16 +73,19 @@
           <td>{{ row.nguonXuat }}</td>
           <td>{{ row.giaTri }}</td>
           <td>{{ row.thoiGian }}</td>
-          <td>{{ row.tinhTrang }}</td>
+          <td :class="['status', getStatusClass(row.tinhTrang)]">
+            {{ row.tinhTrang }}
+          </td>
           <td>
-            <button @click="editRow(row)">✏️</button>
-            <button @click="deleteRow(row)">🗑️</button>
+            <button class="btn btn-primary" @click="editRow(row)">✏️</button>
+            <button class="btn btn-danger" @click="deleteRow(row)">🗑️</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
+
 <script>
 export default {
   data() {
@@ -64,31 +95,31 @@ export default {
         tinhTrang: "",
         nguonXuat: "",
         tuNgay: "",
-        denNgay: ""
+        denNgay: "",
       },
       data: [
         {
-          maPhieu: "XXXX",
+          maPhieu: "PNK001",
           nguonXuat: "Nhà cung cấp A",
           giaTri: "50.000.000",
           thoiGian: "01/09/2025 15:30",
-          tinhTrang: "Chờ duyệt"
+          tinhTrang: "Chờ duyệt",
         },
         {
-          maPhieu: "XXXX",
+          maPhieu: "PNK002",
           nguonXuat: "Nhà cung cấp B",
           giaTri: "40.000.000",
           thoiGian: "03/09/2025 09:30",
-          tinhTrang: "Đã duyệt"
+          tinhTrang: "Đã duyệt",
         },
         {
-          maPhieu: "XXXX",
+          maPhieu: "PNK003",
           nguonXuat: "Nhà cung cấp C",
           giaTri: "50.000.000",
           thoiGian: "04/09/2025 08:30",
-          tinhTrang: "Từ chối"
-        }
-      ]
+          tinhTrang: "Từ chối",
+        },
+      ],
     };
   },
   methods: {
@@ -103,39 +134,23 @@ export default {
     },
     deleteRow(row) {
       alert("Xóa phiếu: " + row.maPhieu);
-    }
-  }
+    },
+    getStatusClass(status) {
+      if (status === "Chờ duyệt") return "pending";
+      if (status === "Đã duyệt") return "approved";
+      if (status === "Từ chối") return "rejected"; // ✅ sửa lỗi đỏ
+      return "";
+    },
+  },
 };
 </script>
+
 <style scoped>
 .warehouse-page {
   padding: 20px;
   font-family: Arial, sans-serif;
 }
-.title {
-  font-size: 20px;
-  margin-bottom: 15px;
-}
-.filter-box {
-  background: #eee;
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 15px;
-}
-.filter-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-.filter-row label {
-  margin-right: 5px;
-  min-width: 80px;
-}
-.filter-row input,
-.filter-row select {
-  margin-right: 15px;
-  padding: 5px;
-}
+
 .create-btn {
   margin-bottom: 15px;
   text-align: right;
@@ -148,6 +163,7 @@ export default {
   border-radius: 4px;
   cursor: pointer;
 }
+
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -155,11 +171,27 @@ export default {
 }
 .data-table th,
 .data-table td {
-  border: 1px solid #ccc;
+  border: 1px solid #ddd; 
   padding: 8px;
   text-align: center;
 }
 .data-table th {
   background: #f8f8f8;
+}
+
+.status.pending {
+  background-color: orange;
+}
+.status.approved {
+  background-color: green;
+}
+.status.rejected {
+  background-color: red;
+}
+.status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #fff;
 }
 </style>
