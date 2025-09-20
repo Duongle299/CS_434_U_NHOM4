@@ -1,4 +1,4 @@
-<template >
+<template>
   <div>
     <div class="row mt-5">
       <div class="col-lg-12">
@@ -18,7 +18,7 @@
                 <div class="col-lg-2">
                   <label>Tình trạng:</label>
                   <select class="form-control" v-model="filters.tinhTrang">
-                    <option  value="">-- Chọn --</option>
+                    <option value="">-- Chọn --</option>
                     <option>Chờ duyệt</option>
                     <option>Đã duyệt</option>
                     <option>Từ chối</option>
@@ -36,23 +36,24 @@
                 </div>
                 <div class="col-lg-3">
                   <label>Đến ngày:</label>
-                <input class="form-control"  type="date" v-model="filters.denNgay" />
+                  <input class="form-control" type="date" v-model="filters.denNgay" />
                 </div>
                 <div class="col-lg-3 mt-5">
                   <button class="btn btn-primary" @click="timKiem">
                     Tìm kiếm
                   </button>
                 </div>
-                
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
     <div class="create-btn">
       <button @click="taoPhieu">+ Tạo phiếu nhập kho</button>
     </div>
+
     <table class="data-table">
       <thead>
         <tr>
@@ -73,9 +74,8 @@
           <td>{{ row.giaTri }}</td>
           <td>{{ row.thoiGian }}</td>
           <td :class="['status', getStatusClass(row.tinhTrang)]">
-          {{ row.tinhTrang }}
+            {{ row.tinhTrang }}
           </td>
-
           <td>
             <button class="btn btn-primary" @click="editRow(row)">✏️</button>
             <button class="btn btn-danger" @click="deleteRow(row)">🗑️</button>
@@ -85,6 +85,7 @@
     </table>
   </div>
 </template>
+
 <script>
 export default {
   data() {
@@ -98,21 +99,21 @@ export default {
       },
       data: [
         {
-          maPhieu: "XXXX",
+          maPhieu: "PNK001",
           nguonXuat: "Nhà cung cấp A",
           giaTri: "50.000.000",
           thoiGian: "01/09/2025 15:30",
           tinhTrang: "Chờ duyệt",
         },
         {
-          maPhieu: "XXXX",
+          maPhieu: "PNK002",
           nguonXuat: "Nhà cung cấp B",
           giaTri: "40.000.000",
           thoiGian: "03/09/2025 09:30",
           tinhTrang: "Đã duyệt",
         },
         {
-          maPhieu: "XXXX",
+          maPhieu: "PNK003",
           nguonXuat: "Nhà cung cấp C",
           giaTri: "50.000.000",
           thoiGian: "04/09/2025 08:30",
@@ -121,49 +122,35 @@ export default {
       ],
     };
   },
-   methods: {
-    timKiem() { alert("Thực hiện tìm kiếm...") },
-    taoPhieu() { alert("Tạo phiếu nhập kho mới!") },
-    editRow(row) { alert("Sửa phiếu: " + row.maLenh) },
-    deleteRow(row) { alert("Xóa phiếu: " + row.maLenh) },
+  methods: {
+    timKiem() {
+      alert("Thực hiện tìm kiếm...");
+    },
+    taoPhieu() {
+      alert("Tạo phiếu nhập kho mới!");
+    },
+    editRow(row) {
+      alert("Sửa phiếu: " + row.maPhieu);
+    },
+    deleteRow(row) {
+      alert("Xóa phiếu: " + row.maPhieu);
+    },
     getStatusClass(status) {
       if (status === "Chờ duyệt") return "pending";
       if (status === "Đã duyệt") return "approved";
-      if (status === "Từ chối") return "rejected";
+      if (status === "Từ chối") return "rejected"; // ✅ sửa lỗi đỏ
       return "";
-    }
-  }
+    },
+  },
 };
 </script>
+
 <style scoped>
 .warehouse-page {
   padding: 20px;
   font-family: Arial, sans-serif;
 }
-/* .title {
-  font-size: 20px;
-  margin-bottom: 15px;
-}
-.filter-box {
-  background: #eee;
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 15px;
-}
-.filter-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-.filter-row label {
-  margin-right: 5px;
-  min-width: 10px;
-} */
-/* .filter-row input,
-.filter-row select {
-  margin-right: 15px;
-  padding: 5px;
-} */
+
 .create-btn {
   margin-bottom: 15px;
   text-align: right;
@@ -176,6 +163,7 @@ export default {
   border-radius: 4px;
   cursor: pointer;
 }
+
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -183,13 +171,14 @@ export default {
 }
 .data-table th,
 .data-table td {
-  border: 1px solid #ccc;
+  border: 1px solid #ddd; 
   padding: 8px;
   text-align: center;
 }
 .data-table th {
   background: #f8f8f8;
 }
+
 .status.pending {
   background-color: orange;
 }
@@ -203,6 +192,6 @@ export default {
   padding: 4px 8px;
   border-radius: 4px;
   font-weight: bold;
-  color: white;
+  color: #fff;
 }
 </style>
