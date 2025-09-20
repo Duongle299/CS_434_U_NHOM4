@@ -26,6 +26,15 @@ const routes = [
         component: ()=>import('../components/admin/thanh_toan/index.vue')
 
     },
+    {
+        path : '/admin/phieu_nhap',  
+        component: () => import('../components/admin/kho/Phieunhapkho.vue')
+    },
+    {
+        path : '/admin/phieu_xuat',  
+        component: () => import('../components/admin/kho/Phieuxuatkho.vue')
+    },
+   
 ]
 
 const router = createRouter({
