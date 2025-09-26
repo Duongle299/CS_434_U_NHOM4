@@ -13,7 +13,9 @@
                     class="form-control"
                     type="text"
                     v-model="filters.maPhieu"
-                  />
+                  />@auth
+                    
+                  @endauth
                 </div>
                 <div class="col-lg-2">
                   <label>Tình trạng:</label>
@@ -49,11 +51,9 @@
         </div>
       </div>
     </div>
-
     <div class="create-btn">
       <button @click="taoPhieu">+ Tạo phiếu nhập kho</button>
     </div>
-
     <table class="data-table">
       <thead>
         <tr>
