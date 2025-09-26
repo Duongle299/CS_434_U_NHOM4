@@ -34,19 +34,19 @@
                      <template v-for="(value, index) in list_vattu" :key="index">
                         <tr class="text-center align-middle text-nowrap">
                            <td>{{ index + 1 }}</td>
-                           <td>{{ value.ten_vattu }}</td>
-                           <td><img :src="value.hinh_anh" style="width: 100px; height: 80px;" alt=""></td>
-                           <td>{{ value.loai_vattu }}</td>
+                           <td>{{ value.ten_vat_tu }}</td>
+                           <td><img :src=value.hinh_anh style="width: 100px; height: 80px;" alt=""></td>
+                           <td>{{ value.loai_vat_tu }}</td>
                            <td>{{ value.don_vi_tinh }}</td>
                            <td>{{ value.trong_luong }}</td>
-                           <td>{{ value.so_luong_tonkho }}</td>
+                           <td>{{ value.so_luong_ton_kho }}</td>
                            <td>{{ value.gia_ban }}</td>
                            <td><span v-if="value.tinh_trang == '1'" class="badge bg-success ">Còn hàng</span>
                               <span v-else class="badge bg-danger ">Hết hàng</span>
                            </td>
                            <td>
-                              <button class="btn btn-warning" data-toggle="modal" data-target="#capnhat">Cập nhật</button>
-                              <button class="btn btn-danger ml-2" data-toggle="modal" data-target="#xoa">Xóa</button>
+                              <button v-on:click="Object.assign(up_vattu,value)" class="btn btn-warning" data-toggle="modal" data-target="#capnhat">Cập nhật</button>
+                              <button v-on:click="Object.assign(de_vattu,value)" class="btn btn-danger ml-2" data-toggle="modal" data-target="#xoa">Xóa</button>
                            </td>
                         </tr>
                      </template>
@@ -69,31 +69,31 @@
                <div class="row">
                   <div class="col-lg-6">
                      <label class="form-label" for="">Mã vật tư</label>
-                     <input class="form-control" type="text" name="" id="">
-                     <label class="form-label" for="">Loại vật tư</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="cre_vattu.ma_vat_tu" class="form-control" type="text" name="" id="">
+                     <label  class="form-label" for="">Loại vật tư</label>
+                     <input v-model="cre_vattu.loai_vat_tu"  class="form-control" type="text" name="" id="">
                      <label class="form-label" for="">Trọng lượng</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="cre_vattu.trong_luong" class="form-control" type="text" name="" id="">
                   </div>
                   <div class="col-lg-6">
                      <label class="form-label" for="">Tên vật tư</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="cre_vattu.ten_vat_tu" class="form-control" type="text" name="" id="">
                      <label class="form-label" for="">Đơn vị tính</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="cre_vattu.don_vi_tinh" class="form-control" type="text" name="" id="">
                      <label class="form-label" for="">Số lượng tồn kho</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="cre_vattu.so_luong_ton_kho" class="form-control" type="text" name="" id="">
                   </div>
                   <div class="col-lg-12">
                      <label class="form-label" for="">Hình ảnh</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="cre_vattu.hinh_anh" class="form-control" type="text" name="" id="">
                   </div>
                   <div class="col-lg-6">
                      <label class="form-label" for="">Giá bán</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="cre_vattu.gia_ban" class="form-control" type="text" name="" id="">
                   </div>
                   <div class="col-lg-6">
                      <label class="form-label" for="">Tình trạng</label>
-                     <select class="form-control" name="" id="">
+                     <select v-model="cre_vattu.tinh_trang" class="form-control" name="" id="">
                         <option value="1">Còn hàng</option>
                         <option value="0">Hết hàng</option>
                      </select>
@@ -101,7 +101,7 @@
                </div>
             </div>
             <div class="modal-footer">
-               <button type="button" class="btn btn-primary" data-dismiss="modal">Thêm mới</button>
+               <button v-on:click="themvattu()" type="button" class="btn btn-primary" data-dismiss="modal">Thêm mới</button>
             </div>
          </div>
       </div>
@@ -117,33 +117,33 @@
             </div>
             <div class="modal-body">
                <div class="row">
-                  <div class="col-lg-6">
+                   <div class="col-lg-6">
                      <label class="form-label" for="">Mã vật tư</label>
-                     <input class="form-control" type="text" name="" id="">
-                     <label class="form-label" for="">Loại vật tư</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="up_vattu.ma_vat_tu" class="form-control" type="text" name="" id="">
+                     <label  class="form-label" for="">Loại vật tư</label>
+                     <input v-model="up_vattu.loai_vat_tu"  class="form-control" type="text" name="" id="">
                      <label class="form-label" for="">Trọng lượng</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="up_vattu.trong_luong" class="form-control" type="text" name="" id="">
                   </div>
                   <div class="col-lg-6">
                      <label class="form-label" for="">Tên vật tư</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="up_vattu.ten_vat_tu" class="form-control" type="text" name="" id="">
                      <label class="form-label" for="">Đơn vị tính</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="up_vattu.don_vi_tinh" class="form-control" type="text" name="" id="">
                      <label class="form-label" for="">Số lượng tồn kho</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="up_vattu.so_luong_ton_kho" class="form-control" type="text" name="" id="">
                   </div>
                   <div class="col-lg-12">
                      <label class="form-label" for="">Hình ảnh</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="up_vattu.hinh_anh" class="form-control" type="text" name="" id="">
                   </div>
                   <div class="col-lg-6">
                      <label class="form-label" for="">Giá bán</label>
-                     <input class="form-control" type="text" name="" id="">
+                     <input v-model="up_vattu.gia_ban" class="form-control" type="text" name="" id="">
                   </div>
                   <div class="col-lg-6">
                      <label class="form-label" for="">Tình trạng</label>
-                     <select class="form-control" name="" id="">
+                     <select v-model="up_vattu.tinh_trang" class="form-control" name="" id="">
                         <option value="1">Còn hàng</option>
                         <option value="0">Hết hàng</option>
                      </select>
@@ -151,7 +151,7 @@
                </div>
             </div>
             <div class="modal-footer">
-               <button type="button" class="btn btn-primary" data-dismiss="modal">Xác nhận</button>
+               <button v-on:click="capnhatvattu()" type="button" class="btn btn-primary" data-dismiss="modal">Xác nhận</button>
             </div>
          </div>
       </div>
@@ -171,38 +171,67 @@
                </div>
             </div>
             <div class="modal-footer">
-               <button type="button" class="btn btn-primary" data-dismiss="modal">Xác nhận</button>
+               <button v-on:click="xoavattu()" type="button" class="btn btn-primary" data-dismiss="modal">Xác nhận</button>
             </div>
          </div>
       </div>
    </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
    data() {
       return {
-         list_vattu: [
-            {
-               ten_vattu: "Xi Măng PCB 40",
-               hinh_anh: "https://tse3.mm.bing.net/th/id/OIP.E0Kyyj5DWtIWD03HtVh9BgHaG-?pid=Api&P=0&h=220",
-               loai_vattu: "Vật liệu xây dựng",
-               don_vi_tinh: "Bao",
-               trong_luong: "50kg",
-               so_luong_tonkho: 12000,
-               gia_ban: "78.000đ",
-               tinh_trang: "1" // 1: con hang, 0: het hang
-            },
-            {
-               ten_vattu: "Ống PVC 27",
-               hinh_anh: "https://nhuadekko.com/wp-content/uploads/2020/10/ong-nhua-pvc-dekko-he-inch.jpg",
-               loai_vattu: "Vật liệu Điện nước",
-               don_vi_tinh: "Mét",
-               trong_luong: "0.35kg/m",
-               so_luong_tonkho: "120 mét",
-               gia_ban: "15.000đ/m",
-               tinh_trang: "0" // 1: con hang, 0: het hang
-            },
-         ]
+         list_vattu: [],
+         cre_vattu:{},
+         up_vattu:{},
+         de_vattu:{},
+      }
+   },
+   mounted() {
+      this.laydulieu();
+   },
+   methods: {
+      laydulieu(){
+         axios
+         .get('http://127.0.0.1:8000/api/admin/lay-data')
+         .then(res => {
+            this.list_vattu = res.data.data;
+         })
+      },
+      themvattu(){
+         axios
+         .post('http://127.0.0.1:8000/api/admin/them-vat-tu', this.cre_vattu)
+         .then(res => {
+            if(res.data.status){
+               alert(res.data.message);
+               this.laydulieu();
+            }
+            alert("thêm mới thất bại");
+         })
+      },
+      capnhatvattu(){
+         axios
+         .post('http://127.0.0.1:8000/api/admin/update-vat-tu', this.up_vattu)
+         .then(res => {
+            if(res.data.status){
+               alert(res.data.message);
+               this.laydulieu();
+            }
+            alert("cập nhật thất bại");
+         })
+      },
+      xoavattu(){
+         axios
+         .post('http://127.0.0.1:8000/api/admin/delete-vat-tu', this.de_vattu)
+         .then(res => {
+            if(res.data.status){
+               alert(res.data.message);
+               this.laydulieu();
+            }
+            alert("xóa thất bại");
+         })
       }
    },
 
