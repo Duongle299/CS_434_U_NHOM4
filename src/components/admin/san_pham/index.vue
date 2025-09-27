@@ -208,8 +208,18 @@ export default {
                alert(res.data.message);
                this.laydulieu();
             }
-            alert("thêm mới thất bại");
+            alert(res.data.message);
          })
+         .catch(error => {
+                    var obj = error.response.data.errors;
+                    var result = Object.keys(obj).map((key) => [key, obj[key]]);
+                    result.forEach((value_1, key_1) => {
+                        var xxx = value_1[1];
+                        xxx.forEach((value, key) => {
+                            alert(value);
+                        });
+                    });
+                });
       },
       capnhatvattu(){
          axios
