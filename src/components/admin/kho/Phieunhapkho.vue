@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Filter box -->
     <div class="row mt-5">
       <div class="col-lg-12">
         <div class="card">
@@ -9,13 +10,7 @@
               <div class="row">
                 <div class="col-lg-5">
                   <label>Mã phiếu:</label>
-                  <input
-                    class="form-control"
-                    type="text"
-                    v-model="filters.maPhieu"
-                  />@auth
-                    
-                  @endauth
+                  <input class="form-control" type="text" v-model="filters.maPhieu" />
                 </div>
                 <div class="col-lg-2">
                   <label>Tình trạng:</label>
@@ -27,7 +22,7 @@
                   </select>
                 </div>
               </div>
-              <div class="row">
+              <div class="row mt-3">
                 <div class="col-lg-3">
                   <label>Nguồn xuất:</label>
                   <input class="form-control" type="text" v-model="filters.nguonXuat" />
@@ -40,10 +35,8 @@
                   <label>Đến ngày:</label>
                   <input class="form-control" type="date" v-model="filters.denNgay" />
                 </div>
-                <div class="col-lg-3 mt-5">
-                  <button class="btn btn-primary" @click="timKiem">
-                    Tìm kiếm
-                  </button>
+                <div class="col-lg-3 mt-4">
+                  <button class="btn btn-primary" @click="timKiem">Tìm kiếm</button>
                 </div>
               </div>
             </div>
@@ -51,10 +44,14 @@
         </div>
       </div>
     </div>
-    <div class="create-btn">
-      <button @click="taoPhieu">+ Tạo phiếu nhập kho</button>
+
+    <!-- Button tạo phiếu -->
+    <div class="text-right mt-3">
+      <button class="btn btn-primary" data-toggle="modal" data-target="#themmoi">+ Tạo phiếu nhập kho</button>
     </div>
-    <table class="data-table">
+
+    <!-- Table hiển thị dữ liệu -->
+    <table class="data-table mt-3">
       <thead>
         <tr>
           <th>STT</th>
@@ -73,9 +70,7 @@
           <td>{{ row.nguonXuat }}</td>
           <td>{{ row.giaTri }}</td>
           <td>{{ row.thoiGian }}</td>
-          <td :class="['status', getStatusClass(row.tinhTrang)]">
-            {{ row.tinhTrang }}
-          </td>
+          <td :class="['status', getStatusClass(row.tinhTrang)]">{{ row.tinhTrang }}</td>
           <td>
             <button class="btn btn-primary" @click="editRow(row)">✏️</button>
             <button class="btn btn-danger" @click="deleteRow(row)">🗑️</button>
@@ -83,110 +78,119 @@
         </tr>
       </tbody>
     </table>
+
+    <!-- Modal tạo phiếu -->
+    <div class="modal fade" id="themmoi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Thêm mới Vật tư</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <label>Mã phiếu</label>
+                <input class="form-control" type="text" v-model="newPhieu.maPhieu">
+
+                <label>Nguồn xuất</label>
+                <input class="form-control" type="text" v-model="newPhieu.nguonXuat">
+              </div>
+
+              <div class="col-lg-6">
+                <label>Từ ngày</label>
+                <input class="form-control" type="date" v-model="newPhieu.tuNgay">
+
+                <label>Đến ngày</label>
+                <input class="form-control" type="date" v-model="newPhieu.denNgay">
+              </div>
+
+              <div class="col-lg-12 mt-3">
+                <label>Tình trạng</label>
+                <select class="form-control" v-model="newPhieu.tinhTrang">
+                  <option value="2">Đang chờ</option>
+                  <option value="1">Đã duyệt</option>
+                  <option value="0">Từ chối</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" v-on:click="taoPhieu">Thêm mới</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      filters: {
-        maPhieu: "",
-        tinhTrang: "",
-        nguonXuat: "",
-        tuNgay: "",
-        denNgay: "",
-      },
-      data: [
-        {
-          maPhieu: "PNK001",
-          nguonXuat: "Nhà cung cấp A",
-          giaTri: "50.000.000",
-          thoiGian: "01/09/2025 15:30",
-          tinhTrang: "Chờ duyệt",
-        },
-        {
-          maPhieu: "PNK002",
-          nguonXuat: "Nhà cung cấp B",
-          giaTri: "40.000.000",
-          thoiGian: "03/09/2025 09:30",
-          tinhTrang: "Đã duyệt",
-        },
-        {
-          maPhieu: "PNK003",
-          nguonXuat: "Nhà cung cấp C",
-          giaTri: "50.000.000",
-          thoiGian: "04/09/2025 08:30",
-          tinhTrang: "Từ chối",
-        },
-      ],
+      filters: { maPhieu: "", tinhTrang: "", nguonXuat: "", tuNgay: "", denNgay: "" },
+      data: [],
+      newPhieu: { maPhieu: "", nguonXuat: "", tuNgay: "", denNgay: "", tinhTrang: "2" }
     };
   },
+  mounted() {
+    this.laydata();
+  },
   methods: {
+    laydata() {
+      axios.get('http://127.0.0.1:8000/admin/lay-data-phieunhapkho')
+        .then(res => this.data = res.data.data);
+    },
+
     timKiem() {
       alert("Thực hiện tìm kiếm...");
     },
+
     taoPhieu() {
-      alert("Tạo phiếu nhập kho mới!");
+      axios.post('http://127.0.0.1:8000/admin/them-phieu-nhap', this.newPhieu)
+        .then(res => {
+          alert("Thêm phiếu thành công!");
+          this.laydata(); // reload table
+          this.newPhieu = { maPhieu: "", nguonXuat: "", tuNgay: "", denNgay: "", tinhTrang: "2" }; // reset form
+          $('#themmoi').modal('hide'); // đóng modal
+        })
+        .catch(err => {
+          alert("Lỗi: " + (err.response?.data?.message || err.message));
+        });
     },
-    editRow(row) {
-      alert("Sửa phiếu: " + row.maPhieu);
-    },
-    deleteRow(row) {
-      alert("Xóa phiếu: " + row.maPhieu);
-    },
+
+    editRow(row) { alert("Sửa phiếu: " + row.maPhieu); },
+    deleteRow(row) { alert("Xóa phiếu: " + row.maPhieu); },
+
     getStatusClass(status) {
       if (status === "Chờ duyệt") return "pending";
       if (status === "Đã duyệt") return "approved";
-      if (status === "Từ chối") return "rejected"; // ✅ sửa lỗi đỏ
+      if (status === "Từ chối") return "rejected";
       return "";
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
-.warehouse-page {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
-
-.create-btn {
-  margin-bottom: 15px;
-  text-align: right;
-}
-.create-btn button {
-  background: #007bff;
-  color: #fff;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 .data-table {
   width: 100%;
   border-collapse: collapse;
   background: #fff;
+  margin-top: 20px;
 }
 .data-table th,
 .data-table td {
-  border: 1px solid #ddd; 
+  border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
 }
 .data-table th {
   background: #f8f8f8;
-}
-
-.status.pending {
-  background-color: orange;
-}
-.status.approved {
-  background-color: green;
-}
-.status.rejected {
-  background-color: red;
 }
 .status {
   padding: 4px 8px;
@@ -194,4 +198,8 @@ export default {
   font-weight: bold;
   color: #fff;
 }
+.status.pending { background-color: orange; }
+.status.approved { background-color: green; }
+.status.rejected { background-color: red; }
+.btn-primary { cursor: pointer; }
 </style>
